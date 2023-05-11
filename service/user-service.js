@@ -66,10 +66,11 @@ class UserService {
       throw ApiError.UnauthorizedError()
     }
 
-    const userDto = await UserModel.findById(userData.id)
+    const user = await UserModel.findById(userData.id)
+    const userDto = new UserDto(user)
     const tokens = tokenService.generateTokens({...userDto})
-    await tokenService.saveToken(userDto.id, tokens.refreshToken)
 
+    await tokenService.saveToken(userDto.id, tokens.refreshToken)
     return {...tokens, user: userDto}
   }
 
