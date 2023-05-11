@@ -4,12 +4,13 @@ const uuid = require('uuid');
 const mailService = require('../service/mail-service');
 const tokenService = require('../service/token-service');
 const UserDto = require('../service/dtos/user-dto');
+const ApiError = require('../exceptions/api-error');
 
 class UserService {
   async registration(email, password) {
     const candidate = await UserModel.findOne({email})
     if(candidate){
-      throw new Error(`${email} already exists, try a new one`)
+      throw ApiError.BadRequest(`${email} already exists, try a new one`)
     }
     const hashPassword = await bcrypt.hash(password, 3)
     const activationLink = uuid.v4()
@@ -27,10 +28,31 @@ class UserService {
   async activate(activationLink){
     const user = await UserModel.findOne({activationLink})
     if(!user){
-      throw new Error('Incorrect link')
+      throw ApiError.BadRequest('Incorrect link')
     }
     user.isActivated = true
     await user.save()
+  }
+
+  async login(email, password){
+  const user = await UserModel.findOne({email})
+    if(!user) {
+      throw ApiError.BadRequest('User with this email doesnt exist')
+    }
+    const isPassEquals = await  bcrypt.compare(password, user.password)
+    if(!isPassEquals){
+      throw ApiError.BadRequest('Incorrect Password !!!')
+    }
+    const userDto = new UserDto(user)
+    const tokens = tokenService.generateTokens({...userDto})
+    await tokenService.saveToken(userDto.id, tokens.refreshToken)
+
+    return {...tokens, user: userDto}
+  }
+
+  async logOut(refreshToken){
+    const token = await tokenService.removeToken(refreshToken)
+    return token
   }
 
 }
