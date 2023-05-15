@@ -1,4 +1,5 @@
-const ProductModel = require('../models/token-model')
+const ProductModel = require('../models/product-model')
+const ApiError = require('../exceptions/api-error');
 
 
 class ProductService {
@@ -8,9 +9,19 @@ class ProductService {
     return products
   }
 
+  async getOne(id) {
+    return ProductModel.findById(id)
+  }
+
   async addProduct(product) {
-    await ProductModel.create(product)
-    return product
+    try {
+      const newProduct = new ProductModel(product)
+      return await newProduct.save()
+
+    } catch (e) {
+      return {message: 'this product is already exist'}
+    }
+
   }
 }
 

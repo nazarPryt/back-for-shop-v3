@@ -1,33 +1,42 @@
 const ProductService = require('../service/product-service');
 
 class ProductController {
-  async getAll ( req, res, next) {
+  async getAll ( req, res) {
     try {
       const products = await ProductService.getAll()
-      res.json(products)
+      return res.json(products)
 
     } catch (e) {
-      next(e)
+      console.log(e);
     }
   }
 
-  async addProduct ( req, res, next) {
+  async addProduct ( req, res) {
     try {
       const product = {...req.body}
-      await ProductService.addProduct(product)
-      res.json({product, message: 'new product was successfully added'})
+
+      if(product.title){
+        const createdProduct = await ProductService.addProduct(product)
+        return res.json({createdProduct, message: 'new product was successfully added'})
+      }
+      return res.json({message: 'cant save'})
 
     } catch (e) {
-      next(e)
+      console.log(e);
     }
   }
 
-  async getOne ( req, res, next) {
+  async getOne ( req, res) {
     try {
-
+      const {id} = req.params
+      if(id){
+        const product = await ProductService.getOne(id)
+        return res.json(product)
+      }
+      return res.json({message: 'cant find this product'})
 
     } catch (e) {
-      next(e)
+      console.log(e);
     }
   }
 
