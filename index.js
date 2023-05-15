@@ -28,4 +28,4 @@ const startApp = async () => {
   }
 }
 startApp()
-export default app
+//export default app
