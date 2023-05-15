@@ -11,6 +11,17 @@ class ProductController {
     }
   }
 
+  async addProduct ( req, res, next) {
+    try {
+      const product = {...req.body}
+      await ProductService.addProduct(product)
+      res.json({product, message: 'new product was successfully added'})
+
+    } catch (e) {
+      next(e)
+    }
+  }
+
   async getOne ( req, res, next) {
     try {
 

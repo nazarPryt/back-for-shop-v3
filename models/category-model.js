@@ -1,8 +1,7 @@
-const {Schema, model} = require('mongoose')
+const {Schema, model} = require('mongoose');
 
-const TokenSchema = new Schema({
-  user: {type: Schema.Types.ObjectId, ref: 'User'},
-  refreshToken: {type: String, require: true},
+const CategorySchema = new Schema({
+  name: { type: String, unique: true},
+  products: {type: Array},
 })
-
-module.exports = model('Token', TokenSchema)
+module.exports = model('Category', CategorySchema)

@@ -8,8 +8,8 @@ class ProductService {
     return products
   }
 
-  async getOne(id) {
-    const product = await ProductModel.findById(id)
+  async addProduct(product) {
+    await ProductModel.create(product)
     return product
   }
 }

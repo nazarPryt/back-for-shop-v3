@@ -8,14 +8,7 @@ const ProductSchema = new Schema({
   oldPrice: {type: Number, require: true},
   quantity: {type: Number, require: true},
   cover: {type: String, require: true},
-  imgAll: {type: Schema.Types.ObjectId, ref: 'Product-imgAll'},
-  category: {type: Schema.Types.ObjectId, ref: 'Category'},
+  imgAll: {type: Array, require: true},
+  category: {type: Array, require: true},
 })
-
 module.exports = model('Product', ProductSchema)
-
-const CategorySchema = new Schema({
-  name: {type: String, require: true, },
-})
-
-module.exports = model('Category', CategorySchema)
