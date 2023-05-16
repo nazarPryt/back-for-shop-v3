@@ -1,17 +1,18 @@
-import express, { Request, Response } from 'express'
-import { productsRouter } from './routes/products-router'
-import { userRouter } from './routes/user-router'
+import express, { Application, Request, Response } from 'express'
 import dotenv from 'dotenv'
+import { routes } from './routes/routes'
+import mongoose from 'mongoose'
 
 dotenv.config()
 
-const app = express()
-const PORT = process.env.PORT || 4000
+const app: Application = express()
+const PORT = process.env.PORT || 5000
 
-app.use('/products', productsRouter)
-app.use('/user', userRouter)
+// routes
+app.use('/api', routes)
 
-app.get('/', (req: Request, res: Response) => {
+app.get('/', async (req: Request, res: Response) => {
+   await mongoose.connect(process.env.DB_URL || 'user')
    res.send('Back works properly  :)')
 })
 
