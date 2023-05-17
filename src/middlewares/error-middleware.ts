@@ -1,7 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
-import { ApiErrorType } from '../exceptions/api-error'
-
-const ApiError = require('../exceptions/api-error')
+import { ApiError, ApiErrorType } from '../exceptions/api-error'
 
 export const errorMiddleware = (
    err: ApiErrorType,

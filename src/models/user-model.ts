@@ -5,9 +5,9 @@ const UserSchema = new Schema({
    password: { type: String, require: true },
    activationLink: { type: String },
    isActivated: { type: Boolean, default: false },
-   role: { type: String, defaultValue: 'USER' },
+   role: { type: String, default: 'USER' },
 })
 
 type UserSchemaType = InferSchemaType<typeof UserSchema>
 
-export const UserModel = mongoose.model('Users', UserSchema)
+export const UserModel = mongoose.model('users', UserSchema)

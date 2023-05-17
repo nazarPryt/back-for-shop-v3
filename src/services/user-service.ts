@@ -1,10 +1,11 @@
 import { UserModel } from '../models/user-model'
 import bcrypt from 'bcrypt'
-import uuid from 'uuid'
-import mailService from './mail-service'
+
+import mailService from './mail-service/mail-service'
 import TokenService from './token-service'
 import { UserDto } from './dtos/user-dto'
 import { ApiError } from '../exceptions/api-error'
+import { v4 } from 'uuid'
 
 class UserService {
    async registration(email: string, password: string) {
@@ -13,7 +14,7 @@ class UserService {
          throw ApiError.BadRequest(`${email} already exists, try a new one`)
       }
       const hashPassword = await bcrypt.hash(password, 3)
-      const activationLink = uuid.v4()
+      const activationLink = v4()
 
       const user = await UserModel.create({
          email,

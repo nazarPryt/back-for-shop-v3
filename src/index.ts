@@ -4,7 +4,9 @@ import { routes } from './routes/routes'
 import { errorMiddleware } from './middlewares/error-middleware'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
-import { runDb } from './exceptions/db'
+import mongoose from 'mongoose'
+//Mongoose Node.js Express TypeScript application boilerplate with best practices for API development.
+//https://github.com/chiragmehta900/node-typescript-boilerplate-mongoose
 
 dotenv.config()
 
@@ -22,21 +24,34 @@ app.use(
 app.use('/api', routes)
 app.use(errorMiddleware)
 
-const startServer = async () => {
+const startApp = async () => {
    try {
-      await runDb()
-
+      // await mongoose.connect(process.env.DB_URL)
+      await mongoose.connect('mongodb://0.0.0.0:27017')
       app.listen(PORT, () => {
-         console.log(
-            'Server is Successfully Running,and App is listening on port ' +
-               PORT
-         )
+         console.log('Server is running on port' + PORT)
       })
    } catch (e) {
-      console.log('can not start server :(')
+      console.log(e)
    }
 }
-startServer()
+startApp()
+
+// const startServer = async () => {
+//    try {
+//       await runDb()
+//
+//       app.listen(PORT, () => {
+//          console.log(
+//             'Server is Successfully Running,and App is listening on port ' +
+//                PORT
+//          )
+//       })
+//    } catch (e) {
+//       console.log('can not start server :(')
+//    }
+// }
+// startServer()
 
 // app.get('/', async (req: Request, res: Response) => {
 //    await mongoose.connect(process.env.DB_URL || 'user')
