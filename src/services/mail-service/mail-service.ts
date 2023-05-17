@@ -1,5 +1,7 @@
 import nodemailer from 'nodemailer'
+import { MailInterface } from '../../interfaces/mailInterface'
 
+//documentation how to send email
 //https://medium.com/@chiragmehta900/how-to-send-mail-in-node-js-with-nodemailer-in-typescript-889cc46d1437
 
 export default class MailService {
@@ -33,8 +35,8 @@ export default class MailService {
    //CREATE A CONNECTION FOR LIVE
    async createConnection() {
       this.transporter = nodemailer.createTransport({
-         host: process.env.SMTP_HOST,
-         port: process.env.SMTP_PORT,
+         host: String(process.env.SMTP_HOST) || 'local',
+         port: Number(process.env.SMTP_PORT) || 0,
          secure: false,
          auth: {
             user: process.env.SMTP_USER,
@@ -48,35 +50,26 @@ export default class MailService {
       requestId: string | number | string[],
       options: MailInterface
    ) {
-      return await this.transporter
-         .sendMail({
-            from: `"chiragmehta900" ${process.env.SMTP_SENDER || options.from}`,
-            to: options.to,
-            cc: options.cc,
-            bcc: options.bcc,
-            subject: options.subject,
-            text: options.text,
-            html: options.html,
-         })
-         .then((info) => {
-            Logging.info(`${requestId} - Mail sent successfully!!`)
-            Logging.info(
-               `${requestId} - [MailResponse]=${info.response} [MessageID]=${info.messageId}`
-            )
-            if (process.env.NODE_ENV === 'local') {
-               Logging.info(
-                  `${requestId} - Nodemailer ethereal URL: ${nodemailer.getTestMessageUrl(
-                     info
-                  )}`
-               )
-            }
-            return info
-         })
+      return await this.transporter.sendMail({
+         from: `${process.env.SMTP_USER || options.from}`,
+         to: options.to,
+         cc: options.cc,
+         bcc: options.bcc,
+         subject: options.subject,
+         text: options.text,
+         html: options.html,
+      })
    }
 
    //VERIFY CONNECTION
    async verifyConnection() {
-      return this.transporter.verify()
+      return this.transporter.verify((error, success) => {
+         if (error) {
+            console.log(error)
+         } else {
+            console.log('Server is ready to take our messages')
+         }
+      })
    }
 
    //CREATE TRANSPORTER

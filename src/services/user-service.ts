@@ -1,11 +1,12 @@
 import { UserModel } from '../models/user-model'
 import bcrypt from 'bcrypt'
 
-import mailService from './mail-service/mail-service'
 import TokenService from './token-service'
 import { UserDto } from './dtos/user-dto'
 import { ApiError } from '../exceptions/api-error'
 import { v4 } from 'uuid'
+import MailService from './mail-service/mail-service'
+import { verifyEmailTamplate } from './mail-service/verifyEmailTemplate'
 
 class UserService {
    async registration(email: string, password: string) {
@@ -21,10 +22,15 @@ class UserService {
          password: hashPassword,
          activationLink,
       })
-      await mailService.sendActivationMail(
-         email,
-         `${process.env.API_URL}/api/users/activate/${activationLink}`
-      )
+      const emailTemplate = verifyEmailTamplate('otp')
+      const mailService = MailService.getInstance()
+      await mailService.createConnection()
+      await mailService.verifyConnection()
+      await mailService.sendMail(activationLink, {
+         to: email,
+         subject: 'Verify OTP',
+         html: emailTemplate.html,
+      })
 
       const userDto = new UserDto(user)
       const tokens = TokenService.generateTokens({ ...userDto })

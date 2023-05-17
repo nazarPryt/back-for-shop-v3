@@ -1,4 +1,4 @@
-const verifyEmail = function (otp: string) {
+export const verifyEmailTamplate = function (otp: string) {
    const html = `
     <!DOCTYPE html>
     <html lang="en" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
@@ -162,5 +162,3 @@ Use this link to confirm your account and log in
       text: text,
    }
 }
-
-export default verifyEmail
