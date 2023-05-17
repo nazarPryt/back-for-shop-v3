@@ -3,15 +3,18 @@ import { Response, Request, NextFunction } from 'express'
 import { validationResult } from 'express-validator'
 import { ApiError } from '../exceptions/api-error'
 
-class UserController {
-   async registration(req: Request, res: Response, next: NextFunction) {
-      const { email, password } = req.body
-      debugger
+class userController {
+   async registration(
+      req: Request<{}, {}, { password: string; email: string }>,
+      res: Response,
+      next: NextFunction
+   ) {
       try {
          const errors = validationResult(req)
          if (!errors.isEmpty()) {
-            return next(ApiError.BadRequest('Validation Error', errors.array()))
+            return next(ApiError.BadRequest('Validation Error'))
          }
+         const { email, password } = req.body
 
          const userData = await UserService.registration(email, password)
          res.cookie('refreshToken', userData.refreshToken, {
@@ -79,6 +82,8 @@ class UserController {
    async getUsers(req: Request, res: Response, next: NextFunction) {
       try {
          const users = await UserService.getAllUsers()
+         // const users = ['user-one', 'user-tho']
+
          res.json(users)
       } catch (e) {
          next(e)
@@ -86,4 +91,4 @@ class UserController {
    }
 }
 
-export default new UserController()
+export const UserController = new userController()

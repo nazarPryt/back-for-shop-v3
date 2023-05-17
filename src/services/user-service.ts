@@ -22,7 +22,7 @@ class UserService {
       })
       await mailService.sendActivationMail(
          email,
-         `${process.env.API_URL}/api/activate/${activationLink}`
+         `${process.env.API_URL}/api/users/activate/${activationLink}`
       )
 
       const userDto = new UserDto(user)
@@ -83,6 +83,7 @@ class UserService {
 
    async getAllUsers() {
       const users = await UserModel.find() //without parameters - return all users
+      console.log(users)
       return users
    }
 }
