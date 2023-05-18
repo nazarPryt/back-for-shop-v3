@@ -1,10 +1,4 @@
-// type UserDtoType = {
-//    email: string
-//    id: string
-//    isActivated: boolean
-// }
-
-export class UserDto {
+export const UserDto = class {
    email
    id
    isActivated
@@ -16,3 +10,16 @@ export class UserDto {
    }
 }
 // export default new UserDto()
+
+// type UserDtoType = {
+//    email: string
+//    id: string
+//    isActivated: boolean
+// }
+// export const UserDto = (user: UserSchemaType): UserDtoType => {
+//    return {
+//       email: user.email,
+//       id: user._id,
+//       isActivated: user.isActivated,
+//    }
+// }

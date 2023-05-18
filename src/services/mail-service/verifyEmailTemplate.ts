@@ -1,4 +1,8 @@
-export const verifyEmailTamplate = function (otp: string) {
+export const verifyEmailTamplate = function (otp: {
+   link: string
+   title: string
+   site: string
+}) {
    const html = `
     <!DOCTYPE html>
     <html lang="en" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
@@ -9,7 +13,7 @@ export const verifyEmailTamplate = function (otp: string) {
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <meta name="format-detection" content="telephone=no, date=no, address=no, email=no">
-      <title>Reset your Password</title>
+      <title>${otp.title}</title>
       <link
         href="https://fonts.googleapis.com/css?family=Montserrat:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,500;1,600;1,700"
         rel="stylesheet" media="screen">
@@ -100,14 +104,14 @@ Use this link to confirm your account and log in</div>
                         <td class="sm-px-24"
                           style="--bg-opacity: 1; background-color: #ffffff;  border-radius: 4px; font-family: Montserrat, -apple-system, 'Segoe UI', sans-serif; font-size: 14px; line-height: 24px; padding: 48px; text-align: left; --text-opacity: 1; color: #626262;"
                            align="left">
-                          <p style="font-weight: 600; font-size: 18px; margin-bottom: 0;">Hey there,</p>
+                          <p style="font-weight: 600; font-size: 18px; margin-bottom: 0;">Hey there, my name Nazar Prytuliak</p>
 
                           <p style="margin: 0 0 24px;">
-                            A request to create your node-typescript-boilerplate account was received.
-Use this link to confirm your account and log in
+                            This is a link to confirm your accoun on this site <a href="${otp.link}" class="hover-underline"
+                              style="--text-opacity: 1; color: #7367f0;  text-decoration: none;">${otp.site}</a>
                           </p>
 
-                          <lable style="display: block; font-size: 24px; line-height: 100%; margin-bottom: 24px; --text-opacity: 1; color: #000000; text-decoration: none;">${otp}</lable>
+                          <lable style="display: block; font-size: 24px; line-height: 100%; margin-bottom: 24px; --text-opacity: 1; color: #000000; text-decoration: none;">${otp.title}</lable>
                           <table style="font-family: 'Montserrat',Arial,sans-serif;" cellpadding="0" cellspacing="0"
                             role="presentation">
                             <tr>
@@ -130,11 +134,11 @@ Use this link to confirm your account and log in
                             </tr>
                           </table>
                           <p style="margin: 0 0 16px;">
-                            Needing some additional support? Please contact us at
-                            <a href="mailto:chiragmehta900@gmail.com" class="hover-underline"
-                              style="--text-opacity: 1; color: #7367f0;  text-decoration: none;">chiragmehta900@gmail.com</a>.
+                            If you are interested to hire, just drop me a line here
+                            <a href="mailto:ockap90@libero.it" class="hover-underline"
+                              style="--text-opacity: 1; color: #7367f0;  text-decoration: none;">ockap90@libero.it</a>.
                           </p>
-                          <p style="margin: 0 0 16px;">Thanks, <br>The node-typescript-boilerplate Support Team</p>
+                          <p style="margin: 0 0 16px;">Thanks, it wasn't easy, but captivatig to create, develop and send this email :)</p>
                         </td>
                       </tr>
                       <tr>

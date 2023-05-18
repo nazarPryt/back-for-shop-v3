@@ -1,4 +1,7 @@
 import mongoose, { Schema, InferSchemaType } from 'mongoose'
+import { randomUUID } from 'crypto'
+
+// id: { type: 'UUID', default: () => randomUUID() },
 
 const UserSchema = new Schema({
    email: { type: String, unique: true, require: true },
@@ -8,6 +11,13 @@ const UserSchema = new Schema({
    role: { type: String, default: 'USER' },
 })
 
-type UserSchemaType = InferSchemaType<typeof UserSchema>
+// export type UserSchemaType = {
+//    email: string
+//    password: string
+//    activationLink: string
+//    isActivated: boolean
+//    role: string
+//    _id: string
+// }
 
-export const UserModel = mongoose.model('users', UserSchema)
+export const UserModel = mongoose.model('Users', UserSchema)

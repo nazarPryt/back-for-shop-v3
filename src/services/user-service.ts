@@ -2,11 +2,11 @@ import { UserModel } from '../models/user-model'
 import bcrypt from 'bcrypt'
 
 import TokenService from './token-service'
-import { UserDto } from './dtos/user-dto'
 import { ApiError } from '../exceptions/api-error'
 import { v4 } from 'uuid'
 import MailService from './mail-service/mail-service'
 import { verifyEmailTamplate } from './mail-service/verifyEmailTemplate'
+import { UserDto } from './dtos/user-dto'
 
 class UserService {
    async registration(email: string, password: string) {
@@ -22,14 +22,19 @@ class UserService {
          password: hashPassword,
          activationLink,
       })
-      const emailTemplate = verifyEmailTamplate('otp')
+      const emailTemplate = verifyEmailTamplate({
+         title: 'Confirmation link',
+         link: 'activation link here',
+         site: process.env.CLIENT_URL,
+      })
       const mailService = MailService.getInstance()
       await mailService.createConnection()
       await mailService.verifyConnection()
       await mailService.sendMail(activationLink, {
          to: email,
-         subject: 'Verify OTP',
+         subject: 'Activation link',
          html: emailTemplate.html,
+         from: process.env.CLIENT_URL,
       })
 
       const userDto = new UserDto(user)
@@ -40,58 +45,58 @@ class UserService {
    }
 
    async activate(activationLink: string) {
-      const user = await UserModel.findOne({ activationLink })
-      if (!user) {
-         throw ApiError.BadRequest('Incorrect link')
-      }
+      // const user = await UserModel.findOne({ activationLink })
+      // if (!user) {
+      //    throw ApiError.BadRequest('Incorrect link')
+      // }
       // user.isActivated = true
       // await user.save() //todo
    }
 
    async login(email: string, password: string) {
-      const user = await UserModel.findOne({ email })
-      if (!user) {
-         throw ApiError.BadRequest('User with this email doesnt exist')
-      }
+      // const user = await UserModel.findOne({ email })
+      // if (!user) {
+      //    throw ApiError.BadRequest('User with this email doesnt exist')
+      // }
       // const isPassEquals = await bcrypt.compare(password, user.password)
       // if (!isPassEquals) {
       //    throw ApiError.BadRequest('Incorrect Password !!!') //todo
       // }
-      const userDto = new UserDto(user)
-      const tokens = TokenService.generateTokens({ ...userDto })
-      await TokenService.saveToken(userDto.id, tokens.refreshToken)
-
-      return { ...tokens, user: userDto }
+      // const userDto = new UserDto(user)
+      // const tokens = TokenService.generateTokens({ ...userDto })
+      // await TokenService.saveToken(userDto.id, tokens.refreshToken)
+      //
+      // return { ...tokens, user: userDto }
    }
 
    async logOut(refreshToken: string) {
-      const token = await TokenService.removeToken(refreshToken)
-      return token
+      // const token = await TokenService.removeToken(refreshToken)
+      // return token
    }
 
    async refresh(refreshToken: string) {
-      if (!refreshToken) {
-         throw ApiError.UnauthorizedError()
-      }
-      const userData = TokenService.validateRefreshToken(refreshToken)
-      const tokenFromDB = await TokenService.findToken(refreshToken)
-
-      if (!userData || !tokenFromDB) {
-         throw ApiError.UnauthorizedError()
-      }
-
-      const user = await UserModel.findById(userData.id)
-      const userDto = new UserDto(user)
-      const tokens = TokenService.generateTokens({ ...userDto })
-
-      await TokenService.saveToken(userDto.id, tokens.refreshToken)
-      return { ...tokens, user: userDto }
+      // if (!refreshToken) {
+      //    throw ApiError.UnauthorizedError()
+      // }
+      // const userData = TokenService.validateRefreshToken(refreshToken)
+      // const tokenFromDB = await TokenService.findToken(refreshToken)
+      //
+      // if (!userData || !tokenFromDB) {
+      //    throw ApiError.UnauthorizedError()
+      // }
+      //
+      // const user = await UserModel.findById(userData.id)
+      // const userDto = new UserDto(user)
+      // const tokens = TokenService.generateTokens({ ...userDto })
+      //
+      // await TokenService.saveToken(userDto.id, tokens.refreshToken)
+      // return { ...tokens, user: userDto }
    }
 
    async getAllUsers() {
-      const users = await UserModel.find() //without parameters - return all users
-      console.log(users)
-      return users
+      // const users = await UserModel.find() //without parameters - return all users
+      // console.log(users)
+      // return users
    }
 }
 export default new UserService()

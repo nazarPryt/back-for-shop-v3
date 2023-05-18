@@ -4,7 +4,7 @@ const ProductSchema = new Schema({
    available: { type: Boolean, require: true },
    description: { type: String, require: true },
    title: { type: String, require: true },
-   price: Number,
+   price: { type: Number, require: true },
    oldPrice: { type: Number, require: true },
    quantity: { type: Number, require: true },
    cover: { type: String, require: true },
