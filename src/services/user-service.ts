@@ -54,7 +54,7 @@ class UserService {
    }
 
    async login(email: string, password: string) {
-      const user: UserSchemaType = await UserModel.findOne({ email })
+      const user: UserSchemaType | null = await UserModel.findOne({ email })
       if (!user) {
          throw ApiError.BadRequest('User with this email doesnt exist')
       }
@@ -70,8 +70,8 @@ class UserService {
    }
 
    async logOut(refreshToken: string) {
-      // const token = await TokenService.removeToken(refreshToken)
-      // return token
+      const token = await TokenService.removeToken(refreshToken)
+      return token
    }
 
    async refresh(refreshToken: string) {
