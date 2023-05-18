@@ -1,7 +1,7 @@
 export const verifyEmailTamplate = function (otp: {
-   link: string
-   title: string
-   site: string
+   link: string | undefined
+   title: string | undefined
+   site: string | undefined
 }) {
    const html = `
     <!DOCTYPE html>

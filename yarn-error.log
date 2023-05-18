@@ -30,11 +30,11 @@ npm manifest:
   {
     "name": "shop-v3",
     "version": "1.0.0",
-    "main": "dist/index.js",
+    "main": "dist/index.ts",
     "license": "MIT",
     "scripts": {
       "watch": "tsc -w",
-      "dev": "nodemon --inspect dist/index.js",
+      "dev": "nodemon --inspect dist/index.ts",
       "vercel-build": "echo hello"
     },
     "dependencies": {

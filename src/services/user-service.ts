@@ -1,4 +1,4 @@
-import { UserModel } from '../models/user-model'
+import { UserModel, UserSchemaType } from '../models/user-model'
 import bcrypt from 'bcrypt'
 
 import TokenService from './token-service'
@@ -54,19 +54,19 @@ class UserService {
    }
 
    async login(email: string, password: string) {
-      // const user = await UserModel.findOne({ email })
-      // if (!user) {
-      //    throw ApiError.BadRequest('User with this email doesnt exist')
-      // }
-      // const isPassEquals = await bcrypt.compare(password, user.password)
-      // if (!isPassEquals) {
-      //    throw ApiError.BadRequest('Incorrect Password !!!') //todo
-      // }
-      // const userDto = new UserDto(user)
-      // const tokens = TokenService.generateTokens({ ...userDto })
-      // await TokenService.saveToken(userDto.id, tokens.refreshToken)
-      //
-      // return { ...tokens, user: userDto }
+      const user: UserSchemaType = await UserModel.findOne({ email })
+      if (!user) {
+         throw ApiError.BadRequest('User with this email doesnt exist')
+      }
+      const isPassEquals = await bcrypt.compare(password, user.password)
+      if (!isPassEquals) {
+         throw ApiError.BadRequest('Incorrect Password !!!')
+      }
+      const userDto = new UserDto(user)
+      const tokens = TokenService.generateTokens({ ...userDto })
+      await TokenService.saveToken(userDto.id, tokens.refreshToken)
+
+      return { ...tokens, user: userDto }
    }
 
    async logOut(refreshToken: string) {

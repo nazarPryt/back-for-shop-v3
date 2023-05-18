@@ -10,7 +10,7 @@ import mongoose from 'mongoose'
 
 dotenv.config()
 
-export const app: Application = express()
+const app: Application = express()
 const PORT = process.env.PORT || 5000
 
 app.use(express.json())
@@ -37,6 +37,7 @@ const startApp = async () => {
 }
 startApp()
 
+export default app
 // const startServer = async () => {
 //    try {
 //       await runDb()

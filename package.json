@@ -1,7 +1,7 @@
 {
   "name": "shop-v3",
   "version": "1.0.0",
-  "main": "dist/index.ts",
+  "main": "index.ts",
   "license": "MIT",
   "scripts": {
     "watch": "tsc -w",
