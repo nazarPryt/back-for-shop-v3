@@ -31,11 +31,12 @@ exports.app.use((0, cors_1.default)({
     credentials: true,
     origin: process.env.CLIENT_URL,
 }));
-exports.app.use('/api', routes_1.routes);
+exports.app.use('/', routes_1.routes);
 exports.app.use(error_middleware_1.errorMiddleware);
 const startApp = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield mongoose_1.default.connect(process.env.DB_URL || 'mongodb://0.0.0.0:27017');
+        // await mongoose.connect('mongodb://0.0.0.0:27017')
         exports.app.listen(PORT, () => {
             console.log('Server is running on port' + PORT);
         });

@@ -5,6 +5,9 @@ import { orderRouter } from './order-router'
 
 export const routes = Router({})
 
-routes.use('/users', userRouter)
-routes.use('/products', productRouter)
-routes.use('/orders', orderRouter)
+routes.use('/api/users', userRouter)
+routes.use('/api/products', productRouter)
+routes.use('/api/orders', orderRouter)
+routes.get('/', (req, res) => {
+   return res.send('Server works properly. Express Typescript on Vercel :)')
+})
