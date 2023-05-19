@@ -7,6 +7,7 @@ import { v4 } from 'uuid'
 import MailService from './mail-service/mail-service'
 import { verifyEmailTamplate } from './mail-service/verifyEmailTemplate'
 import { UserDto } from './dtos/user-dto'
+import { JwtPayload } from 'jsonwebtoken'
 
 class UserService {
    async registration(email: string, password: string) {
@@ -75,28 +76,28 @@ class UserService {
    }
 
    async refresh(refreshToken: string) {
-      // if (!refreshToken) {
-      //    throw ApiError.UnauthorizedError()
-      // }
-      // const userData = TokenService.validateRefreshToken(refreshToken)
-      // const tokenFromDB = await TokenService.findToken(refreshToken)
-      //
-      // if (!userData || !tokenFromDB) {
-      //    throw ApiError.UnauthorizedError()
-      // }
-      //
-      // const user = await UserModel.findById(userData.id)
-      // const userDto = new UserDto(user)
-      // const tokens = TokenService.generateTokens({ ...userDto })
-      //
-      // await TokenService.saveToken(userDto.id, tokens.refreshToken)
-      // return { ...tokens, user: userDto }
+      if (!refreshToken) {
+         throw ApiError.UnauthorizedError()
+      }
+      const userData = TokenService.validateRefreshToken(refreshToken)
+
+      const tokenFromDB = await TokenService.findToken(refreshToken)
+
+      if (!userData || !tokenFromDB) {
+         throw ApiError.UnauthorizedError()
+      }
+
+      const user = await UserModel.findById(userData.id)
+
+      const userDto = new UserDto(user)
+      const tokens = TokenService.generateTokens({ ...userDto })
+
+      await TokenService.saveToken(userDto.id, tokens.refreshToken)
+      return { ...tokens, user: userDto }
    }
 
    async getAllUsers() {
-      // const users = await UserModel.find() //without parameters - return all users
-      // console.log(users)
-      // return users
+      return UserModel.find() //without parameters - return all users
    }
 }
 export default new UserService()

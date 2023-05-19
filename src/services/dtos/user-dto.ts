@@ -11,11 +11,11 @@ export const UserDto = class {
 }
 // export default new UserDto()
 
-// type UserDtoType = {
-//    email: string
-//    id: string
-//    isActivated: boolean
-// }
+export type UserDtoType = {
+   email: string
+   id: string
+   isActivated: boolean
+}
 // export const UserDto = (user: UserSchemaType): UserDtoType => {
 //    return {
 //       email: user.email,

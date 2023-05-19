@@ -1,5 +1,7 @@
-import { TokenModel } from '../models/token-model'
+import { TokenModel, TokenSchemaType } from '../models/token-model'
 import jwt from 'jsonwebtoken'
+import { UserDtoType } from './dtos/user-dto'
+import { DefaultSchemaOptions } from 'mongoose'
 
 class TokenService {
    generateTokens(payload: any) {
@@ -13,9 +15,13 @@ class TokenService {
    }
 
    async saveToken(userId: string, refreshToken: string) {
-      const tokedData = await TokenModel.findOne({ user: userId })
+      const tokedData = await TokenModel.findOne({
+         user: userId,
+      })
+
       if (tokedData) {
-         tokedData.updateOne({ refreshToken })
+         tokedData.refreshToken = refreshToken
+         await tokedData.save()
          return
       }
       const token = await TokenModel.create({ user: userId, refreshToken })
@@ -29,14 +35,13 @@ class TokenService {
 
    async findToken(refreshToken: string) {
       const tokenData = await TokenModel.findOne({ refreshToken })
-      console.log('tokenData', tokenData)
       return tokenData
    }
 
    validateAccessToken(token: string) {
       try {
          const userData = jwt.verify(token, process.env.JWT_ACCESS_SECRET!)
-         return userData
+         return userData as UserDtoType
       } catch (e) {
          return null
       }
@@ -45,7 +50,7 @@ class TokenService {
    validateRefreshToken(token: string) {
       try {
          const userData = jwt.verify(token, process.env.JWT_REFRESH_SECRET!)
-         return userData
+         return userData as UserDtoType
       } catch (e) {
          return null
       }
