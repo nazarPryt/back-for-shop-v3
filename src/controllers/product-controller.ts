@@ -1,5 +1,7 @@
 import ProductService from '../services/product-service'
-import { Response, Request } from 'express'
+import { Response, Request, NextFunction } from 'express'
+import { ProductModel } from '../models/product-model'
+import { ApiError } from '../exceptions/api-error'
 
 class ProductController {
    async getAll(req: Request, res: Response) {
@@ -11,18 +13,28 @@ class ProductController {
       }
    }
 
-   async addProduct(req: Request, res: Response) {
+   async addProduct(req: Request, res: Response, next: NextFunction) {
       try {
          const product = { ...req.body }
 
-         if (product.title) {
-            const createdProduct = await ProductService.addProduct(product)
+         const existed = await ProductModel.findOne({ title: product.title })
+         if (existed) {
+            return next(
+               ApiError.BadRequest(
+                  `${product.title} is already exist, can't add one more`
+               )
+            )
+         }
+
+         const createdProduct = await ProductService.addProduct(product)
+
+         if (typeof createdProduct !== 'string') {
             return res.json({
                createdProduct,
                message: 'new product was successfully added',
             })
          }
-         return res.json({ message: 'cant save' })
+         return next(ApiError.BadRequest(createdProduct))
       } catch (e) {
          console.log(e)
       }

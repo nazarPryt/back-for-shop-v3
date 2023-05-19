@@ -5,4 +5,4 @@ import { productRouter } from './product-router'
 export const routes = Router({})
 
 routes.use('/users', userRouter)
-routes.use('/product', productRouter)
+routes.use('/products', productRouter)

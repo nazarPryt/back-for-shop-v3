@@ -13,9 +13,10 @@ class ProductService {
    async addProduct(product: ProductSchemaType) {
       try {
          const newProduct = new ProductModel(product)
-         return await newProduct.save()
-      } catch (e) {
-         return { message: 'this product is already exist' }
+         await newProduct.save()
+         return newProduct
+      } catch (e: any) {
+         return e.message
       }
    }
 }
