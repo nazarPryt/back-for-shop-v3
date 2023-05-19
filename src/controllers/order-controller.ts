@@ -8,7 +8,8 @@ const stripe = require('stripe')(process.env.STRIPE_KEY)
 class OrderController {
    async getAll(req: Request, res: Response) {
       try {
-         const userID = req.params.userID
+         const userID = req.body.userID
+
          if (userID) {
             const orders = await OrderService.getAll(userID)
             return res.json(orders)

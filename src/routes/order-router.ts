@@ -3,5 +3,5 @@ import OrderController from '../controllers/order-controller'
 
 export const orderRouter = Router()
 
-orderRouter.get('/', OrderController.getAll)
+orderRouter.post('/my', OrderController.getAll)
 orderRouter.post('/', OrderController.createOrder)
