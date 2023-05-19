@@ -1,9 +1,7 @@
 import UserService from '../services/user-service'
-import { Response, Request, NextFunction } from 'express'
+import { NextFunction, Request, Response } from 'express'
 import { validationResult } from 'express-validator'
 import { ApiError } from '../exceptions/api-error'
-import { TokenSchemaType } from '../models/token-model'
-import { UserDtoType } from '../services/dtos/user-dto'
 import { UserRefreshTokenInterface } from '../interfaces/userRefreshTokenInterface'
 
 class userController {
@@ -62,13 +60,13 @@ class userController {
    }
 
    async activate(req: Request, res: Response, next: NextFunction) {
-      // try {
-      //    const activationLink = req.params.link
-      //    await UserService.activate(activationLink)
-      //    return res.redirect(process.env.CLIENT_URL || 'https://google.com')
-      // } catch (e) {
-      //    next(e)
-      // }
+      try {
+         const activationLink = req.params.link
+         await UserService.activate(activationLink)
+         return res.redirect(process.env.CLIENT_URL!)
+      } catch (e) {
+         next(e)
+      }
    }
 
    async refresh(req: Request, res: Response, next: NextFunction) {

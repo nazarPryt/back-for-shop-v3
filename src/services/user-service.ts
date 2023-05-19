@@ -7,7 +7,6 @@ import { v4 } from 'uuid'
 import MailService from './mail-service/mail-service'
 import { verifyEmailTamplate } from './mail-service/verifyEmailTemplate'
 import { UserDto } from './dtos/user-dto'
-import { JwtPayload } from 'jsonwebtoken'
 
 class UserService {
    async registration(email: string, password: string) {
@@ -46,12 +45,13 @@ class UserService {
    }
 
    async activate(activationLink: string) {
-      // const user = await UserModel.findOne({ activationLink })
-      // if (!user) {
-      //    throw ApiError.BadRequest('Incorrect link')
-      // }
-      // user.isActivated = true
-      // await user.save() //todo
+      const user = await UserModel.findOne({ activationLink })
+
+      if (!user) {
+         throw ApiError.BadRequest('Incorrect link')
+      }
+      user.isActivated = true
+      return await user.save()
    }
 
    async login(email: string, password: string) {
