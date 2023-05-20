@@ -22,6 +22,9 @@ import { errorMiddleware } from './middlewares/error-middleware'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import mongoose from 'mongoose'
+import { userRouter } from './routes/user-router'
+import { productRouter } from './routes/product-router'
+import { orderRouter } from './routes/order-router'
 //Mongoose Node.js Express TypeScript application boilerplate with best practices for API development.
 //https://github.com/chiragmehta900/node-typescript-boilerplate-mongoose
 
@@ -32,14 +35,20 @@ const PORT = process.env.PORT || 8080
 
 app.use(express.json())
 app.use(cookieParser())
-app.use(
-   cors({
-      credentials: true,
-      origin: process.env.CLIENT_URL,
-   })
-)
+// app.use(
+//    cors({
+//       credentials: true,
+//       origin: process.env.CLIENT_URL,
+//    })
+// )
 
-app.use('/', routes)
+// app.use('/', routes)
+routes.use('/api/users', userRouter)
+routes.use('/api/products', productRouter)
+routes.use('/api/orders', orderRouter)
+routes.get('/', (req, res) => {
+   return res.send('Server works properly. Express Typescript on Vercel :)')
+})
 app.use(errorMiddleware)
 
 const startApp = async () => {

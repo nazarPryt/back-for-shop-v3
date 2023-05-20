@@ -33,9 +33,11 @@ const express_1 = __importDefault(require("express"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const routes_1 = require("./routes/routes");
 const error_middleware_1 = require("./middlewares/error-middleware");
-const cors_1 = __importDefault(require("cors"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const mongoose_1 = __importDefault(require("mongoose"));
+const user_router_1 = require("./routes/user-router");
+const product_router_1 = require("./routes/product-router");
+const order_router_1 = require("./routes/order-router");
 //Mongoose Node.js Express TypeScript application boilerplate with best practices for API development.
 //https://github.com/chiragmehta900/node-typescript-boilerplate-mongoose
 dotenv_1.default.config();
@@ -43,11 +45,19 @@ exports.app = (0, express_1.default)();
 const PORT = process.env.PORT || 8080;
 exports.app.use(express_1.default.json());
 exports.app.use((0, cookie_parser_1.default)());
-exports.app.use((0, cors_1.default)({
-    credentials: true,
-    origin: process.env.CLIENT_URL,
-}));
-exports.app.use('/', routes_1.routes);
+// app.use(
+//    cors({
+//       credentials: true,
+//       origin: process.env.CLIENT_URL,
+//    })
+// )
+// app.use('/', routes)
+routes_1.routes.use('/api/users', user_router_1.userRouter);
+routes_1.routes.use('/api/products', product_router_1.productRouter);
+routes_1.routes.use('/api/orders', order_router_1.orderRouter);
+routes_1.routes.get('/', (req, res) => {
+    return res.send('Server works properly. Express Typescript on Vercel :)');
+});
 exports.app.use(error_middleware_1.errorMiddleware);
 const startApp = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
