@@ -5,10 +5,6 @@ import { errorMiddleware } from './middlewares/error-middleware'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import mongoose from 'mongoose'
-import { userRouter } from './routes/user-router'
-import { productRouter } from './routes/product-router'
-import { orderRouter } from './routes/order-router'
-import { authMiddleware } from './middlewares/auth-middleware'
 
 dotenv.config()
 
@@ -18,20 +14,18 @@ const URL = process.env.DB_URL || 'mongodb://0.0.0.0:27017'
 
 app.use(express.json())
 app.use(cookieParser())
-// app.use(
-//    cors({
-//       credentials: true,
-//       origin: process.env.CLIENT_URL,
-//    })
-// )
-// app.use('/api', routes)
-// app.use(errorMiddleware)
-
+app.use(
+   cors({
+      credentials: true,
+      origin: process.env.CLIENT_URL,
+   })
+)
 app.get('/', (req, res) => {
    return res.send('Server works properly. Express Typescript on Vercel :)')
 })
-app.use('/api/users', userRouter)
-app.use('/api/products', productRouter)
+app.use('/api', routes)
+app.use(errorMiddleware)
+
 const startApp = async () => {
    try {
       await mongoose.connect(URL)
