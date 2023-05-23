@@ -18,33 +18,31 @@ const URL = process.env.DB_URL || 'mongodb://0.0.0.0:27017'
 
 app.use(express.json())
 app.use(cookieParser())
-// app.use(
-//    cors({
-//       credentials: true,
-//       origin: process.env.CLIENT_URL,
-//    })
-// )
+app.use(
+   cors({
+      credentials: true,
+      origin: process.env.CLIENT_URL,
+   })
+)
 // app.use('/api', routes)
-// app.use(errorMiddleware)
+app.use(errorMiddleware)
 
 app.get('/', (req, res) => {
    return res.send('Server works properly. Express Typescript on Vercel :)')
 })
-// app.use('/api/users', userRouter)
-// app.use('/api/products', productRouter)
-// app.use('/api/orders', orderRouter)
+app.use('/api/users', userRouter)
+app.use('/api/products', productRouter)
+app.use('/api/orders', orderRouter)
 
 const startApp = async () => {
    try {
-      // await mongoose.connect(
-      //    'mongodb+srv://nazar:nazar@cluster0.0bsyvcu.mongodb.net/test?retryWrites=true&w=majority'
-      // )
-      app.listen(PORT, () => {
-         console.log('Server is running on port' + PORT)
-      })
+      await mongoose.connect(URL)
    } catch (e) {
       console.log(e)
    }
+   app.listen(PORT, () => {
+      console.log('Server is running on port' + PORT)
+   })
 }
 startApp()
 
