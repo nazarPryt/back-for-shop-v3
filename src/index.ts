@@ -30,9 +30,9 @@ app.use(cookieParser())
 app.get('/', (req, res) => {
    return res.send('Server works properly. Express Typescript on Vercel :)')
 })
-app.use('/api/users', userRouter)
-app.use('/api/products', productRouter)
-app.use('/api/orders', orderRouter)
+// app.use('/api/users', userRouter)
+// app.use('/api/products', productRouter)
+// app.use('/api/orders', orderRouter)
 
 const startApp = async () => {
    try {
