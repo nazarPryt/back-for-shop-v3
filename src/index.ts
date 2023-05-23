@@ -25,7 +25,7 @@ app.use(cookieParser())
 //    })
 // )
 // app.use('/api', routes)
-app.use(errorMiddleware)
+// app.use(errorMiddleware)
 
 app.get('/', (req, res) => {
    return res.send('Server works properly. Express Typescript on Vercel :)')
@@ -36,7 +36,9 @@ app.use('/api/orders', orderRouter)
 
 const startApp = async () => {
    try {
-      await mongoose.connect(URL)
+      await mongoose.connect(
+         'mongodb+srv://nazar:nazar@cluster0.0bsyvcu.mongodb.net/test?retryWrites=true&w=majority'
+      )
       app.listen(PORT, () => {
          console.log('Server is running on port' + PORT)
       })
