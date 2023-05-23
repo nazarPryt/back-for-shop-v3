@@ -18,19 +18,20 @@ const URL = process.env.DB_URL || 'mongodb://0.0.0.0:27017'
 
 app.use(express.json())
 app.use(cookieParser())
-app.use(
-   cors({
-      credentials: true,
-      origin: process.env.CLIENT_URL,
-   })
-)
-app.use('/api', routes)
-app.use(errorMiddleware)
+// app.use(
+//    cors({
+//       credentials: true,
+//       origin: process.env.CLIENT_URL,
+//    })
+// )
+// app.use('/api', routes)
+// app.use(errorMiddleware)
 
 app.get('/', (req, res) => {
    return res.send('Server works properly. Express Typescript on Vercel :)')
 })
-
+app.use('/api/users', userRouter)
+app.use('/api/products', productRouter)
 const startApp = async () => {
    try {
       await mongoose.connect(URL)

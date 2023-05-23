@@ -6,6 +6,6 @@ import { app } from '../index'
 
 export const routes = Router({})
 
-app.use('/users', userRouter)
-app.use('/products', productRouter)
-app.use('/orders', orderRouter)
+// app.use('/users', userRouter)
+// app.use('/products', productRouter)
+// app.use('/orders', orderRouter)
