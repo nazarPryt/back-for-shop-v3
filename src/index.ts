@@ -24,15 +24,12 @@ app.use(
       origin: process.env.CLIENT_URL,
    })
 )
-// app.use('/api', routes)
+app.use('/api', routes)
 app.use(errorMiddleware)
 
 app.get('/', (req, res) => {
    return res.send('Server works properly. Express Typescript on Vercel :)')
 })
-app.use('/api/users', userRouter)
-app.use('/api/products', productRouter)
-app.use('/api/orders', orderRouter)
 
 const startApp = async () => {
    try {
