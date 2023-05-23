@@ -1,12 +1,11 @@
-import { UserSchemaType } from '../models/user-model'
 import bcrypt from 'bcrypt'
-const UserModel = require('./../models/user-model')
 import TokenService from './token-service'
 import { ApiError } from '../exceptions/api-error'
 import { v4 } from 'uuid'
 import MailService from './mail-service/mail-service'
 import { verifyEmailTamplate } from './mail-service/verifyEmailTemplate'
 import { UserDto } from './dtos/user-dto'
+import { UserModel } from '../models/user-model'
 
 class UserService {
    async registration(email: string, password: string) {
@@ -45,7 +44,7 @@ class UserService {
    }
 
    async activate(activationLink: string) {
-      const user = await UserModel.findOne({ activationLink })
+      const user = await UserModel.findOne({ activationLink }).exec()
 
       if (!user) {
          throw ApiError.BadRequest('Incorrect link')
@@ -55,7 +54,7 @@ class UserService {
    }
 
    async login(email: string, password: string) {
-      const user: UserSchemaType | null = await UserModel.findOne({ email })
+      const user = await UserModel.findOne({ email }).exec()
       if (!user) {
          throw ApiError.BadRequest('User with this email doesnt exist')
       }

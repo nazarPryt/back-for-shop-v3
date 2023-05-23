@@ -1,6 +1,6 @@
-const TokenModel = require('./../models/token-model')
 import jwt from 'jsonwebtoken'
 import { UserDtoType } from './dtos/user-dto'
+import { TokenModel } from '../models/token-model'
 
 class TokenService {
    generateTokens(payload: any) {
@@ -16,7 +16,7 @@ class TokenService {
    async saveToken(userId: string, refreshToken: string) {
       const tokedData = await TokenModel.findOne({
          user: userId,
-      })
+      }).exec()
 
       if (tokedData) {
          tokedData.refreshToken = refreshToken
