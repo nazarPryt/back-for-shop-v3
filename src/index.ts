@@ -36,9 +36,9 @@ app.use('/api/orders', orderRouter)
 
 const startApp = async () => {
    try {
-      await mongoose.connect(
-         'mongodb+srv://nazar:nazar@cluster0.0bsyvcu.mongodb.net/test?retryWrites=true&w=majority'
-      )
+      // await mongoose.connect(
+      //    'mongodb+srv://nazar:nazar@cluster0.0bsyvcu.mongodb.net/test?retryWrites=true&w=majority'
+      // )
       app.listen(PORT, () => {
          console.log('Server is running on port' + PORT)
       })
