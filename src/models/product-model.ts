@@ -1,24 +1,12 @@
-import mongoose, { Schema, InferSchemaType, Types } from 'mongoose'
+import mongoose, { Schema, InferSchemaType } from 'mongoose'
 
-export interface ProductInterface {
-   _id: string
-   available: boolean
-   description: string
-   title: string
-   price: number
-   oldPrice: number
-   quantity: number
-   cover: string
-   imgAll: Types.Array<string>
-   category: Types.Array<string>
-}
 const ProductSchema = new Schema({
    available: { type: Boolean, required: true },
    description: { type: String, required: true },
    title: { type: String, required: true },
    price: { type: Number, required: true },
    oldPrice: { type: Number, required: true },
-   quantity: { type: Number, required: true },
+   quantity: { type: Number, default: 1 },
    cover: { type: String, required: true },
    imgAll: { type: [String], required: true },
    category: { type: [String], required: true },
