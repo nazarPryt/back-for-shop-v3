@@ -1,39 +1,32 @@
 import OrderService from '../services/order-service'
 import { Request, Response } from 'express'
-import { ProductInterface, ProductModel } from '../models/product-model'
+import { ProductModel, ProductSchemaType } from '../models/product-model'
 import { OrderModel } from '../models/order-model'
+import dotenv from 'dotenv'
+import tokenService from '../services/token-service'
+dotenv.config()
 
 const stripe = require('stripe')(process.env.STRIPE_KEY)
 
 class OrderController {
    async getAll(req: Request, res: Response) {
       try {
-         const userID = req.body.userID
+         const token = req.headers.authorization.split(' ')[1]
+         const user = await tokenService.validateAccessToken(token)
+         const userID = user.id
 
          if (userID) {
             const orders = await OrderService.getAll(userID)
             return res.json(orders)
          }
+         return res.json({
+            message:
+               'userID is required, if you want to see orders you should sign in!!!',
+         })
       } catch (e) {
          console.log(e)
       }
    }
-
-   // async createOrder(req: Request, res: Response) {
-   //    try {
-   //       const userID = req.body.userID
-   //       const products = req.body
-   //
-   //       const user = await UserModel.find({ _id: userID })
-   //
-   //       if (user) {
-   //          const order = await OrderService.create(userID, products)
-   //          return res.json(order)
-   //       }
-   //    } catch (e) {
-   //       console.log(e)
-   //    }
-   // }
 
    async createOrder(req: Request, res: Response) {
       try {
@@ -42,9 +35,8 @@ class OrderController {
 
          const lineItems = await Promise.all(
             products.map(async (product: any) => {
-               const item: ProductInterface | null = await ProductModel.findOne(
-                  { _id: product._id }
-               )
+               const item: ProductSchemaType | null =
+                  await ProductModel.findOne({ _id: product._id })
                if (item) {
                   return {
                      price_data: {
@@ -70,7 +62,6 @@ class OrderController {
 
          await OrderModel.create({ products, stripeId: session.id, userID })
          res.json({ stripeSession: session })
-         res.redirect(303, session.url)
       } catch (e) {
          console.log(e)
       }

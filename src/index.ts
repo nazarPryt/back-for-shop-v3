@@ -10,7 +10,7 @@ dotenv.config()
 
 export const app: Application = express()
 const PORT = process.env.PORT || 5000
-const URL = process.env.DB_URL || 'mongodb://0.0.0.0:27017'
+const DB_URL = process.env.DB_URL
 
 app.use(express.json())
 app.use(cookieParser())
@@ -18,6 +18,7 @@ app.use(
    cors({
       credentials: true,
       origin: process.env.CLIENT_URL,
+      preflightContinue: true,
    })
 )
 app.get('/', (req, res) => {
@@ -28,7 +29,7 @@ app.use(errorMiddleware)
 
 const startApp = async () => {
    try {
-      await mongoose.connect(URL)
+      await mongoose.connect(DB_URL)
    } catch (e) {
       console.log(e)
    }
