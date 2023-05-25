@@ -2,24 +2,19 @@ export const UserDto = class {
    email
    id
    isActivated
+   role
 
    constructor(model: any) {
       this.email = model.email
       this.id = model._id
       this.isActivated = model.isActivated
+      this.role = model.role
    }
 }
-// export default new UserDto()
 
 export type UserDtoType = {
    email: string
    id: string
    isActivated: boolean
+   role: 'ADMIN' | 'USER'
 }
-// export const UserDto = (user: UserSchemaType): UserDtoType => {
-//    return {
-//       email: user.email,
-//       id: user._id,
-//       isActivated: user.isActivated,
-//    }
-// }
