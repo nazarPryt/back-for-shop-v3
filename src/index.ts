@@ -21,12 +21,12 @@ app.use(
       preflightContinue: true,
    })
 )
-app.use('/api', routes)
-app.use(errorMiddleware)
-
 app.get('/', (req, res) => {
    return res.send('Server works properly. Express Typescript on Vercel :)')
 })
+app.use('/api', routes)
+app.use(errorMiddleware)
+
 const startApp = async () => {
    try {
       await mongoose.connect(DB_URL)
