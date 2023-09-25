@@ -2,6 +2,8 @@ import ProductService from '../services/product-service'
 import { Response, Request, NextFunction } from 'express'
 import { ProductModel } from '../models/product-model'
 import { ApiError } from '../exceptions/api-error'
+import { v4 } from 'uuid'
+import * as process from 'process'
 
 class ProductController {
    async getAll(req: Request, res: Response) {
@@ -50,6 +52,21 @@ class ProductController {
          return res.json({ message: 'cant find this product' })
       } catch (e) {
          console.log(e)
+      }
+   }
+
+   async uploadCover(req: Request, res: Response) {
+      try {
+         console.log('uploadCover')
+         // const file = req.files.file
+         //
+         // const coverName = v4() + '.jpg'
+         // file.mv(process.env.STATIC_PATH + '//' + coverName)
+
+         return res.status(200).json({ message: 'Upload cover success' })
+      } catch (e) {
+         console.log(e)
+         return res.status(400).json({ message: 'Upload cover error' })
       }
    }
 }

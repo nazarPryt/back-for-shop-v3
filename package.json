@@ -22,7 +22,7 @@
     "nodemailer": "^6.9.2",
     "stripe": "^12.6.0",
     "swagger-ui-express": "^4.6.3",
-    "uuid": "^9.0.0"
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
