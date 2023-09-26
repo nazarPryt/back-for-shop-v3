@@ -6,6 +6,8 @@ import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import mongoose from 'mongoose'
 import fileUpload from 'express-fileupload'
+import process from 'process'
+import { v2 as cloudinary } from 'cloudinary'
 
 dotenv.config()
 
@@ -32,6 +34,12 @@ app.use(errorMiddleware)
 
 const startApp = async () => {
    try {
+      cloudinary.config({
+         cloud_name: process.env.CLOUDINARY_NAME,
+         api_key: process.env.CLOUDINARY_KEY,
+         api_secret: process.env.CLOUDINARY_SECRET,
+         secure: true,
+      })
       await mongoose.connect(DB_URL)
    } catch (e) {
       console.log(e)

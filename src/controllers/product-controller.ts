@@ -4,6 +4,8 @@ import { ProductModel } from '../models/product-model'
 import { ApiError } from '../exceptions/api-error'
 import { v4 } from 'uuid'
 import * as process from 'process'
+import { v2 as cloudinary, UploadApiResponse } from 'cloudinary'
+// import { UploadApiResponse } from 'cloudinary.UploadApiResponse'
 
 class ProductController {
    async getAll(req: Request, res: Response) {
@@ -17,7 +19,14 @@ class ProductController {
 
    async addProduct(req: Request, res: Response, next: NextFunction) {
       try {
-         const product = { ...req.body }
+         const coverFile = req.body.cover
+
+         const coverUrl = cloudinary.url(coverFile, {
+            width: 500,
+            height: 500,
+         })
+
+         const product = { ...req.body, cover: coverUrl }
 
          const existed = await ProductModel.findOne({ title: product.title })
          if (existed) {
@@ -57,14 +66,21 @@ class ProductController {
 
    async uploadCover(req: any, res: Response) {
       try {
-         console.log('req', req)
-         console.log('files', req.files.file)
-         const file = req.files.file
-         //
-         const coverName = v4() + '.jpg'
-         file.mv(process.env.STATIC_PATH + '//' + coverName)
+         const coverFile = req.files.file.data
+         let buff = new Buffer(coverFile)
+         let base64data = buff.toString('base64')
 
-         return res.status(200).json({ message: 'Upload cover success' })
+         const coverJSON = await cloudinary.uploader
+            .upload(base64data)
+            .then((result) => console.log(result))
+
+         console.log('coverJSON', coverJSON)
+
+         const cover = await ProductService.addProductCover({
+            title: 'sd',
+            image: JSON.stringify(coverJSON),
+         })
+         return res.status(200).json({ message: 'Upload cover success', cover })
       } catch (e) {
          console.log(e)
          return res.status(400).json({ message: 'Upload cover error' })
