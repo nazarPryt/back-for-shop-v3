@@ -5,6 +5,8 @@ import { ApiError } from '../exceptions/api-error'
 import { v4 } from 'uuid'
 import * as process from 'process'
 import { v2 as cloudinary, UploadApiResponse } from 'cloudinary'
+import { convertBase64 } from '../exceptions/convertBase64'
+import { ProductCoverSchemaType } from '../models/product-cover-model'
 // import { UploadApiResponse } from 'cloudinary.UploadApiResponse'
 
 class ProductController {
@@ -66,21 +68,15 @@ class ProductController {
 
    async uploadCover(req: any, res: Response) {
       try {
-         const coverFile = req.files.file.data
-         let buff = new Buffer(coverFile)
-         let base64data = buff.toString('base64')
+         const file = req.files.file.tempFilePath
 
-         const coverJSON = await cloudinary.uploader
-            .upload(base64data)
-            .then((result) => console.log(result))
-
-         console.log('coverJSON', coverJSON)
-
-         const cover = await ProductService.addProductCover({
-            title: 'sd',
-            image: JSON.stringify(coverJSON),
+         await cloudinary.uploader.upload(file).then(async (result) => {
+            const cover = await ProductService.addProductCover({
+               title: result.original_filename,
+               image: result,
+            })
+            return res.status(200).json(cover)
          })
-         return res.status(200).json({ message: 'Upload cover success', cover })
       } catch (e) {
          console.log(e)
          return res.status(400).json({ message: 'Upload cover error' })

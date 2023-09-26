@@ -16,7 +16,7 @@ const PORT = process.env.PORT || 5000
 const DB_URL = process.env.DB_URL
 
 app.use(express.json())
-app.use(fileUpload())
+app.use(fileUpload({ useTempFiles: true }))
 app.use(express.static('src/static'))
 app.use(cookieParser())
 app.use(

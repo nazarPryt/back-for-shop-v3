@@ -2,7 +2,7 @@ import mongoose, { Schema, InferSchemaType } from 'mongoose'
 
 const ProductCoverSchema = new Schema({
    title: { type: String, length: 255 },
-   image: { type: Object },
+   image: { type: Schema.Types.Mixed },
 })
 export type ProductCoverSchemaType = InferSchemaType<typeof ProductCoverSchema>
 
