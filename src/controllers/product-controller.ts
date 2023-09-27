@@ -1,12 +1,11 @@
 import ProductService from '../services/product-service'
-import { Response, Request, NextFunction } from 'express'
+import { NextFunction, Request, Response } from 'express'
 import { ProductModel } from '../models/product-model'
 import { ApiError } from '../exceptions/api-error'
-import { v4 } from 'uuid'
-import * as process from 'process'
-import { v2 as cloudinary, UploadApiResponse } from 'cloudinary'
-import { convertBase64 } from '../exceptions/convertBase64'
-import { ProductCoverSchemaType } from '../models/product-cover-model'
+import { v2 as cloudinary } from 'cloudinary'
+import CloudinaryService from '../services/cloudinary-service'
+import { UploadedFile } from 'express-fileupload'
+
 // import { UploadApiResponse } from 'cloudinary.UploadApiResponse'
 
 class ProductController {
@@ -21,14 +20,13 @@ class ProductController {
 
    async addProduct(req: Request, res: Response, next: NextFunction) {
       try {
-         const coverFile = req.body.cover
+         console.log('req', req.files.imgs)
+         // @ts-ignore
+         const coverFile = req.files.file.tempFilePath
 
-         const coverUrl = cloudinary.url(coverFile, {
-            width: 500,
-            height: 500,
-         })
+         const cover = await CloudinaryService.uploadProductCover(coverFile)
 
-         const product = { ...req.body, cover: coverUrl }
+         const product = { ...req.body, cover }
 
          const existed = await ProductModel.findOne({ title: product.title })
          if (existed) {

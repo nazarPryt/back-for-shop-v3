@@ -7,7 +7,7 @@ const ProductSchema = new Schema({
    price: { type: Number, required: true },
    oldPrice: { type: Number, required: true },
    quantity: { type: Number, default: 1 },
-   cover: { type: String, required: true },
+   cover: { type: Schema.Types.Mixed },
    imgAll: { type: [String], required: true },
    category: { type: [String], required: true },
 })
