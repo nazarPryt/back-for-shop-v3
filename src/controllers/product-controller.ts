@@ -20,22 +20,22 @@ class ProductController {
 
    async addProduct(req: Request, res: Response, next: NextFunction) {
       try {
-         console.log('req', req.files.imgs)
-         // @ts-ignore
-         const coverFile = req.files.file.tempFilePath
+         const productData = JSON.parse(req.body.postData)
 
-         const cover = await CloudinaryService.uploadProductCover(coverFile)
-
-         const product = { ...req.body, cover }
-
-         const existed = await ProductModel.findOne({ title: product.title })
+         const existed = await ProductModel.findOne({
+            title: productData.title,
+         })
          if (existed) {
             return next(
                ApiError.BadRequest(
-                  `${product.title} is already exist, can't add one more`
+                  `${productData.title} is already exist, can't add one more`
                )
             )
          }
+         // @ts-ignore
+         const coverFile = req.files.cover.tempFilePath
+         const cover = await CloudinaryService.uploadProductCover(coverFile)
+         const product = { ...productData, cover }
 
          const createdProduct = await ProductService.addProduct(product)
 
