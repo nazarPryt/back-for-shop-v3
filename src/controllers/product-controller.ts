@@ -5,7 +5,7 @@ import { ApiError } from '../exceptions/api-error'
 import { v2 as cloudinary } from 'cloudinary'
 import CloudinaryService from '../services/cloudinary-service'
 import { UploadedFile } from 'express-fileupload'
-
+import path from 'path'
 // import { UploadApiResponse } from 'cloudinary.UploadApiResponse'
 
 class ProductController {
@@ -34,6 +34,15 @@ class ProductController {
          }
          // @ts-ignore
          const coverFile = req.files.cover.tempFilePath
+
+         // // @ts-ignore
+         // req.files.cover.mv(
+         //    // @ts-ignore
+         //    path.resolve(__dirname, '../tmp', req.files.cover.name),
+         //    (error: any) => {
+         //       console.log('coverFile.mv: ', error)
+         //    }
+         // )
          const cover = await CloudinaryService.uploadProductCover(coverFile)
          const product = { ...productData, cover }
 

@@ -7,6 +7,7 @@ import cookieParser from 'cookie-parser'
 import mongoose from 'mongoose'
 import fileUpload from 'express-fileupload'
 import process from 'process'
+import path from 'path'
 import { v2 as cloudinary } from 'cloudinary'
 
 dotenv.config()
@@ -16,7 +17,12 @@ const PORT = process.env.PORT || 5000
 const DB_URL = process.env.DB_URL
 
 app.use(express.json())
-app.use(fileUpload({ useTempFiles: true }))
+app.use(
+   fileUpload({
+      useTempFiles: true,
+      tempFileDir: path.join(__dirname, '/tmp'),
+   })
+)
 app.use(express.static('src/static'))
 app.use(cookieParser())
 app.use(
