@@ -20,6 +20,7 @@ class ProductController {
 
    async addProduct(req: Request, res: Response, next: NextFunction) {
       try {
+
          const productData = JSON.parse(req.body.postData)
 
          const existed = await ProductModel.findOne({
@@ -33,7 +34,7 @@ class ProductController {
             )
          }
          // @ts-ignore
-         const coverFile = req.files.cover.tempFilePath
+         const tempFilePath = req.files.cover.tempFilePath
 
          // // @ts-ignore
          // req.files.cover.mv(
@@ -43,7 +44,7 @@ class ProductController {
          //       console.log('coverFile.mv: ', error)
          //    }
          // )
-         const cover = await CloudinaryService.uploadProductCover(coverFile)
+         const cover = await CloudinaryService.uploadProductCover(tempFilePath)
          const product = { ...productData, cover }
 
          const createdProduct = await ProductService.addProduct(product)
