@@ -34,18 +34,10 @@ class ProductController {
             )
          }
          // @ts-ignore
-         const tempFilePath = req.files.cover.tempFilePath
-
-         // // @ts-ignore
-         // req.files.cover.mv(
-         //    // @ts-ignore
-         //    path.resolve(__dirname, '../tmp', req.files.cover.name),
-         //    (error: any) => {
-         //       console.log('coverFile.mv: ', error)
-         //    }
-         // )
-         const cover = await CloudinaryService.uploadProductCover(tempFilePath)
-         const product = { ...productData, cover }
+         const cover = await CloudinaryService.uploadProductCover(req.files.cover.tempFilePath)
+         // @ts-ignore
+         const imgAll = await CloudinaryService.uploadProductAllImages(req.files.imgAll)
+         const product = { ...productData, cover, imgAll }
 
          const createdProduct = await ProductService.addProduct(product)
 

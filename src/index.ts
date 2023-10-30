@@ -46,7 +46,6 @@ const startApp = async () => {
          api_secret: process.env.CLOUDINARY_SECRET,
          secure: true,
       })
-     console.log('DB_URL', DB_URL);
       await mongoose.connect(DB_URL)
    } catch (e) {
       console.log(e)

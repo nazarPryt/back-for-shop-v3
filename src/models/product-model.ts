@@ -8,7 +8,7 @@ const ProductSchema = new Schema({
    oldPrice: { type: Number, required: true },
    quantity: { type: Number, default: 1 },
    cover: { type: Schema.Types.Mixed },
-   imgAll: { type: [String], required: true },
+   imgAll: { type: Array, required: true },
    category: { type: [String], required: true },
 })
 export type ProductSchemaType = InferSchemaType<typeof ProductSchema>
