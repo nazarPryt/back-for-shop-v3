@@ -1,0 +1,55 @@
+version: '3.5'
+
+services:
+  # Название сервиса
+  mongoDB:
+    # Образ
+    image: mongo
+    # Политика перезапуска
+    restart: always
+    # env переменные
+    # Можно выгрузить из файла
+    env_file:
+      - .env
+    # Название контейнера
+    container_name: shopMongoDB
+    # Тома для постоянного хранения данных (при пересборке не удаляется)
+    volumes:
+      - ./mongo:/var/lib/mongo/data
+    # Порт по которому мы сможем обращаться к приложению : порт приложения внутри контейнера
+    ports:
+      - '27017:27017'
+    # Сети к которым подключен контейнер
+    networks:
+      - online-store-network
+  # Название сервиса
+  app:
+    # Указывает конфигурацию сборки для создания образа контейнера из исходного кода
+    build:
+      # Определяет либо путь к каталогу, содержащему файл Dockerfile, либо URL-адрес репозитория git
+      context: .
+      # Название файла Dockerfile (Dockerfile.production)
+      dockerfile: Dockerfile
+    # Название контейнера
+    container_name: back-for-shop
+    # env переменные
+    env_file:
+      - .env
+    # Порт по которому мы сможем обращаться к приложению : порт приложения внутри контейнера
+    ports:
+      - '9876:9876'
+    # Определяем порядок запуска. app запуститься после db
+    depends_on:
+      - mongoDB
+    # Тома для постоянного хранения данных (при пересборке не удаляется)
+    volumes:
+      - ./src:/app/src
+    # Сети к которым подключен контейнер
+    networks:
+      - online-store-network
+# Определяем сеть для наших контейнеров
+networks:
+  online-store-network:
+    driver: bridge
+
+# Для запуска используем docker-compose up

@@ -46,7 +46,11 @@ const startApp = async () => {
          api_secret: process.env.CLOUDINARY_SECRET,
          secure: true,
       })
-      await mongoose.connect(DB_URL)
+      await mongoose.connect(DB_URL).then(() => {
+        console.log(`Connected to Database :)` );
+      }).catch((err) => {
+        console.log("Not Connected to Database ERROR! ", err);
+      });
    } catch (e) {
       console.log(e)
    }
