@@ -4,9 +4,6 @@ import { ProductModel } from '../models/product-model'
 import { ApiError } from '../exceptions/api-error'
 import { v2 as cloudinary } from 'cloudinary'
 import CloudinaryService from '../services/cloudinary-service'
-import { UploadedFile } from 'express-fileupload'
-import path from 'path'
-// import { UploadApiResponse } from 'cloudinary.UploadApiResponse'
 
 class ProductController {
    async getAll(req: Request, res: Response) {

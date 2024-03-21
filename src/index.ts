@@ -9,12 +9,13 @@ import fileUpload from 'express-fileupload'
 import process from 'process'
 import path from 'path'
 import { v2 as cloudinary } from 'cloudinary'
+import { zodValidation } from "./app/zod-validation";
 
 dotenv.config()
 
 export const app: Application = express()
-const PORT = process.env.PORT || 5000
-const DB_URL = process.env.DB_URL
+const PORT = process.env.PORT || 5001
+const DB_URL = process.env.MONGODB_URL || 'mongodb://localhost:27017'
 
 app.use(express.json())
 app.use(
@@ -40,6 +41,7 @@ app.use(errorMiddleware)
 
 const startApp = async () => {
    try {
+     zodValidation();
       cloudinary.config({
          cloud_name: process.env.CLOUDINARY_NAME,
          api_key: process.env.CLOUDINARY_KEY,
@@ -49,7 +51,7 @@ const startApp = async () => {
       await mongoose.connect(DB_URL).then(() => {
         console.log(`Connected to Database :)` );
       }).catch((err) => {
-        console.log("Not Connected to Database ERROR! ", err);
+        console.log(`Not Connected to Database DB_URL: ${DB_URL}`, err);
       });
    } catch (e) {
       console.log(e)

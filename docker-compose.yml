@@ -37,7 +37,7 @@ services:
       - .env
     # Порт по которому мы сможем обращаться к приложению : порт приложения внутри контейнера
     ports:
-      - '9876:9876'
+      - '5000:5000'
     # Определяем порядок запуска. app запуститься после db
     depends_on:
       - mongoDB
@@ -52,4 +52,4 @@ networks:
   online-store-network:
     driver: bridge
 
-# Для запуска используем docker-compose up
+# Для запуска используем docker compose up
