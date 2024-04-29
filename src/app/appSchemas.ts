@@ -41,11 +41,14 @@ const ApiSettingsSchema = z
    })
    .strict()
 
-export const EnvSchema = ApiSettingsSchema.and(ApiSettingsSchema)
-   .and(CloudinarySettingsSchema)
-   .and(MongoDbSettingsSchema)
-   .and(MailerSettingsSchema)
-   .and(AuthSettingsSchema)
+export const EnvSchema = z
+   .object({})
+   .merge(ApiSettingsSchema)
+   .merge(ApiSettingsSchema)
+   .merge(CloudinarySettingsSchema)
+   .merge(MongoDbSettingsSchema)
+   .merge(MailerSettingsSchema)
+   .merge(AuthSettingsSchema)
 
 export const AppSettingsSchema = z
    .object({

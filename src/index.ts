@@ -4,19 +4,18 @@ import { routes } from './routes/routes'
 import { errorMiddleware } from './middlewares/error-middleware'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
-import mongoose from 'mongoose'
 import fileUpload from 'express-fileupload'
 import process from 'process'
 import path from 'path'
 import { v2 as cloudinary } from 'cloudinary'
 import { appSettingsZodValidation } from './app/AppSettingsZodValidation'
 import { appSettings } from './app/appSettings'
+import { connectDB } from './app/connectDB'
 
 dotenv.config()
 
 export const app: Application = express()
-const PORT = appSettings.env.PORT || 5001
-const DB_URL = appSettings.env.MONGODB_URL || 'mongodb://localhost:27017'
+const PORT = appSettings.env.PORT
 
 app.use(express.json())
 app.use(
@@ -30,7 +29,7 @@ app.use(cookieParser())
 app.use(
    cors({
       credentials: true,
-      origin: [process.env.CLIENT_URL, 'http://localhost:5000'],
+      origin: [process.env.CLIENT_URL, 'http://localhost:3000'],
       preflightContinue: true,
    })
 )
@@ -42,7 +41,9 @@ app.use(errorMiddleware)
 
 const startApp = async () => {
    try {
-      appSettingsZodValidation()
+      await appSettingsZodValidation()
+
+      await connectDB()
 
       cloudinary.config({
          cloud_name: appSettings.env.CLOUDINARY_NAME,
@@ -50,19 +51,12 @@ const startApp = async () => {
          api_secret: appSettings.env.CLOUDINARY_SECRET,
          secure: true,
       })
-      await mongoose
-         .connect(DB_URL)
-         .then(() => {
-            console.log(`Connected to Database :)`)
-         })
-         .catch((err) => {
-            console.log(`Not Connected to Database DB_URL: ${DB_URL}`, err)
-         })
+
       app.listen(PORT, () => {
          console.log('Server is running on port: ' + PORT)
       })
    } catch (e) {
-      console.log(e)
+      console.log('Error to start App: ', e)
    }
 }
 startApp()

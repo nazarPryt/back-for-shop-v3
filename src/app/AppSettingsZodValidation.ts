@@ -1,9 +1,9 @@
 import { AppSettingsSchema } from './appSchemas'
 import { appSettings } from './appSettings'
 
-export const appSettingsZodValidation = () => {
+export const appSettingsZodValidation = async () => {
    try {
-      AppSettingsSchema.parse(appSettings)
+      await AppSettingsSchema.parseAsync(appSettings)
       console.log('appSettingsZod is OK :)')
    } catch (error) {
       console.error('ERROR in appSettingsZod: ', error)

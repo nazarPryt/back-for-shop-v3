@@ -1,10 +1,10 @@
 import process from 'process'
 
 class AppSettings {
-   public readonly constants = {
-      // accessToken: 'accessToken',
-      // refreshToken: 'refreshToken',
-   }
+   // public readonly constants = {
+   // accessToken: 'accessToken',
+   // refreshToken: 'refreshToken',
+   // }
 
    public readonly env = {
       PORT: process.env.PORT,
