@@ -36,7 +36,9 @@ class OrderController {
          const lineItems = await Promise.all(
             products.map(async (product: any) => {
                const item: ProductSchemaType | null =
-                  await ProductModel.findOne({ _id: product._id })
+                  await ProductModel.findOne({
+                     _id: product._id,
+                  })
                if (item) {
                   return {
                      price_data: {

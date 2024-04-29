@@ -17,7 +17,6 @@ class ProductController {
 
    async addProduct(req: Request, res: Response, next: NextFunction) {
       try {
-
          const productData = JSON.parse(req.body.postData)
 
          const existed = await ProductModel.findOne({
@@ -30,10 +29,14 @@ class ProductController {
                )
             )
          }
-         // @ts-ignore
-         const cover = await CloudinaryService.uploadProductCover(req.files.cover.tempFilePath)
-         // @ts-ignore
-         const imgAll = await CloudinaryService.uploadProductAllImages(req.files.imgAll)
+         const cover = await CloudinaryService.uploadProductCover(
+            // @ts-ignore
+            req.files.cover.tempFilePath
+         )
+         const imgAll = await CloudinaryService.uploadProductAllImages(
+            // @ts-ignore
+            req.files.imgAll
+         )
          const product = { ...productData, cover, imgAll }
 
          const createdProduct = await ProductService.addProduct(product)

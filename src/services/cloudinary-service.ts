@@ -6,17 +6,16 @@ class CloudinaryService {
    }
    async uploadProductAllImages(files: []) {
       try {
-         const urls = [];
+         const urls = []
          for (const file of files) {
-            const { tempFilePath } = file;
-            const newPath = await cloudinary.uploader.upload(tempFilePath);
-            urls.push(newPath);
+            const { tempFilePath } = file
+            const newPath = await cloudinary.uploader.upload(tempFilePath)
+            urls.push(newPath)
          }
          return urls
       } catch (e) {
-         console.log(e);
+         console.log(e)
       }
-
    }
 }
 
