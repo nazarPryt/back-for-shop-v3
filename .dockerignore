@@ -4,3 +4,4 @@ docker-compose.yml
 node_modules
 dist
 mongo
+.vercel

@@ -3,6 +3,7 @@ import { NextFunction, Request, Response } from 'express'
 import { validationResult } from 'express-validator'
 import { ApiError } from '../exceptions/api-error'
 import { UserRefreshTokenInterface } from '../interfaces/userRefreshTokenInterface'
+import { UserRequest } from '../middlewares/auth-middleware'
 
 class userController {
    async registration(
@@ -21,6 +22,7 @@ class userController {
          res.cookie('refreshToken', userData.refreshToken, {
             maxAge: 30 * 24 * 60 * 60 * 1000,
             httpOnly: true,
+            sameSite: 'none',
          })
 
          return res.json(userData)
@@ -90,6 +92,14 @@ class userController {
       try {
          const users = await UserService.getAllUsers()
          res.json(users)
+      } catch (e) {
+         next(e)
+      }
+   }
+   async me(req: UserRequest, res: Response, next: NextFunction) {
+      try {
+         const userData = req.user
+         res.status(200).json(userData)
       } catch (e) {
          next(e)
       }
