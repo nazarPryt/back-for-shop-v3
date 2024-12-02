@@ -19,7 +19,7 @@ COPY --chown=node package*.json ./
 COPY --chown=node yarn.lock ./
 
 # Установка зависимостей c блокировкой изменения версий пакетов
-RUN yarn install --frozen-lockfile
+RUN yarn install
 
 # Устанавливаем переменные окружения
 # По данному порту будет подыматься приложение в контейнере
